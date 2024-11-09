@@ -1,5 +1,6 @@
 from pathlib import Path
 from matplotlib.image import imread, imsave
+from random import random
 
 
 def rgb2gray(rgb):
@@ -51,17 +52,59 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        """
+        Rotates the image clockwise.
+        """
+        temp_img = Img(self.path)
+        for row_index in range(len(self.data)):
+            for col_index in range(len(self.data[row_index])):
+                # Iterate over this image's pixels and rotate them, creating a temporary rotated image
+                temp_img.data[col_index][len(self.data)-1-row_index] = self.data[row_index][col_index]
+        self.data = temp_img.data
 
     def salt_n_pepper(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        """
+        Randomly applies image distortion, coloring some image pixels white or black (self and pepper respectively).
+        """
+        for row_index in range(len(self.data)):
+            for col_index in range(len(self.data[row_index])):
+                rnd_float = random()
+                if rnd_float < 0.2:
+                    # Add salt to this pixel
+                    self.data[row_index][col_index] = 255
+                elif rnd_float > 0.8:
+                    # Add pepper to this pixel
+                    self.data[row_index][col_index] = 0
 
     def concat(self, other_img, direction='horizontal'):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        """
+        Concatenates self with other_img so other_img is drawn next to self.
+        direction parameter changes the direction of concatenation and can either be 'horizontal' or 'vertical'.
+        """
+        if direction == 'horizontal':
+            if len(self.data) != len(other_img.data):
+                # If number of rows is different, then the pictures have different heights
+                raise RuntimeError("Pictures with different heights cannot be horizontally concatenated")
+            # Horizontally concatenate images
+            for row_index in range(len(self.data)):
+                self.data[row_index] += other_img.data[row_index]
+        elif direction == 'vertical':
+            if len(self.data[0]) != len(other_img.data[0]):
+                # If number of columns is different, then the pictures have different widths
+                raise RuntimeError("Pictures with different widths cannot be vertically concatenated")
+            # Vertically concatenate images
+            for row_index in range(len(self.data[0])):
+                self.data.append(other_img.data[row_index])
 
     def segment(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        """
+        Segments the image into black and white pixels according to pixel intensity.
+        """
+        temp_img = Img(self.path)
+        for row_index in range(len(self.data)):
+            for col_index in range(len(self.data[row_index])):
+                # Iterate over this image's pixels and converts the values to black (0) or white (255) based on intensity threshold.
+                if self.data[row_index][col_index] > 100:
+                    self.data[row_index][col_index] = 255
+                else:
+                    self.data[row_index][col_index] = 0
