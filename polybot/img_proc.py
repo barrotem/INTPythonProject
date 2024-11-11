@@ -47,20 +47,27 @@ class Img:
         for i, row in enumerate(self.data):
             res = []
             for j in range(1, len(row)):
-                res.append(abs(row[j-1] - row[j]))
+                res.append(abs(row[j - 1] - row[j]))
 
             self.data[i] = res
 
-    def rotate(self):
+    def rotate(self, num_rotations=1):
         """
         Rotates the image clockwise.
         """
-        temp_img = Img(self.path)
-        for row_index in range(len(self.data)):
-            for col_index in range(len(self.data[row_index])):
-                # Iterate over this image's pixels and rotate them, creating a temporary rotated image
-                temp_img.data[col_index][len(self.data)-1-row_index] = self.data[row_index][col_index]
-        self.data = temp_img.data
+        for rotation_number in range(num_rotations):
+            # Initialize a list, which is rotated in comparison to the original data list
+            template_lst = [[row_index for row_index in range(len(self.data))] for col_index in
+                            range(len(self.data[0]))]
+            # Initialize a temp image, with its data set to the newly created template_lst
+            temp_img = Img(self.path)
+            temp_img.data = template_lst
+            # Perform image rotation
+            for row_index in range(len(self.data)):
+                for col_index in range(len(self.data[row_index])):
+                    # Iterate over this image's pixels and rotate them, creating a temporary rotated image
+                    temp_img.data[col_index][len(self.data) - 1 - row_index] = self.data[row_index][col_index]
+            self.data = temp_img.data
 
     def salt_n_pepper(self):
         """
@@ -103,7 +110,8 @@ class Img:
         temp_img = Img(self.path)
         for row_index in range(len(self.data)):
             for col_index in range(len(self.data[row_index])):
-                # Iterate over this image's pixels and converts the values to black (0) or white (255) based on intensity threshold.
+                # Iterate over this image's pixels and converts the values to black (0) or white (255) based on
+                # intensity threshold.
                 if self.data[row_index][col_index] > 100:
                     self.data[row_index][col_index] = 255
                 else:
