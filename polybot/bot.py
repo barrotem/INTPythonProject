@@ -109,7 +109,7 @@ class ImageProcessingBot(Bot):
                                     "segment": photo_as_img.segment,
                                     "salt and pepper": photo_as_img.salt_n_pepper,
                                     }
-                # Specifically handle image concatenation
+                # Specifically handle image concatenation or rotation
                 if 'caption' in msg and ('concat' in msg['caption'].lower() or 'rotate' in msg['caption'].lower() ):
                     if msg['caption'].lower() == "concat":
                         logger.info(f'Applying the following filter on image(s): {msg["caption"].lower()}')
