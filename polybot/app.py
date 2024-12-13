@@ -16,7 +16,7 @@ def index():
 
 @app.route(f'/{TELEGRAM_BOT_TOKEN}/', methods=['POST'])
 def webhook():
-    #Sample comment to commit to github
+    #Sample comment#2 to commit to github
     req = request.get_json()
     bot.handle_message(req['message'])
     return 'Ok'
